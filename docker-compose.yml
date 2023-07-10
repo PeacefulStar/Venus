@@ -1,0 +1,51 @@
+services:
+  os:
+    container_name: centos
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: devOS
+    privileged: true
+    restart: always
+    ports:
+      - "8008:8008"
+
+  server:
+    container_name: server
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: devServer
+    depends_on:
+      - mongodb
+    restart: always
+    env_file: ./.env
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./packages://usr/src/app/packages
+    networks:
+      - express-mongo
+
+  mongodb:
+    container_name: mongo
+#    platform: linux/amd64
+#    image: amd64/mongo:latest
+    image: mongo:latest
+    restart: always
+    env_file: ./.env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$DB_NAME
+      - MONGO_INITDB_ROOT_PASSWORD=$DB_PASS
+    ports:
+      - "27017:27017"
+    volumes:
+      - /opt/homebrew/var/mongodb:/data/db
+#      - ./etc/mongod.conf:/etc/mongod.conf
+#    entrypoint: ["mongod","--config","/etc/mongod.conf"]
+    networks:
+      - express-mongo
+networks:
+  express-mongo:

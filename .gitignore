@@ -1,0 +1,9 @@
+destination
+.sass-cache
+*.css
+*.css.map
+*.scssc
+.idea
+node_modules
+/packages/client/source/pdf/
+/etc/

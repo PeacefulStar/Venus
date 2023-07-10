@@ -1,0 +1,9 @@
+node_modules
+/.idea/
+.dockerignore
+.gitignore
+/etc/
+/yarn-error.log
+/docker-compose.yml
+/Dockerfile
+/README.md
