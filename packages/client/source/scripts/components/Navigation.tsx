@@ -6,26 +6,26 @@ import style from '../../styles/scss/main.module.scss';
 const Navigation: React.FunctionComponent = () => {
     return (
         <nav>
-            <div className={style['left-nav']}>
+            <div className={style.left_nav}>
                 <ul>
                     <li>
                         <Link to={'/'}>
-                            <div className={style['home-link']}>Home</div>
+                            <div className={style.home_link}>Home</div>
                         </Link>
                     </li>
                     <li>
                         <Link to={'/reality'}>
-                            <div className={style['global-link']}>Reality</div>
+                            <div className={style.global_link}>Reality</div>
                         </Link>
                     </li>
                     <li>
                         <Link to={'/contact'}>
-                            <div className={style['global-link']}>Contact</div>
+                            <div className={style.global_link}>Contact</div>
                         </Link>
                     </li>
                 </ul>
             </div>
-            <div className={style['right-nav']}>
+            <div className={style.right_nav}>
                 <Link to={'/signup'}>SignUp</Link>
                 <Link to={'/login'}>Login</Link>
             </div>

@@ -1,11 +1,11 @@
 nav {
     position: relative;
     height: 40px;
-    .left-nav,
-    .right-nav {
+    .left_nav,
+    .right_nav {
         display: inline-block;
     }
-    .left-nav {
+    .left_nav {
         margin: 0 10px;
         ul {
             height: 40px;
@@ -15,7 +15,7 @@ nav {
             }
         }
     }
-    .right-nav {
+    .right_nav {
         position: absolute;
         right: 20px;
         a {

@@ -6,46 +6,42 @@ services:
       context: .
       dockerfile: Dockerfile
       target: devOS
+      args:
+        user: $USER
+        pass: $PASS
     privileged: true
-    restart: always
-    ports:
-      - "8008:8008"
-
-  server:
-    container_name: server
-    platform: linux/amd64
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: devServer
-    depends_on:
-      - mongodb
     restart: always
     env_file: ./.env
     ports:
+      - "53:53"
+      - "8008:8008"
       - "3000:3000"
+#      - "27018:27017"
     volumes:
-      - ./packages://usr/src/app/packages
-    networks:
-      - express-mongo
+      - /opt/homebrew/var/mongodb:/var/lib/mongo
+      - ./packages:/usr/src/app/packages
+    depends_on:
+      - mongodb
 
   mongodb:
     container_name: mongo
-#    platform: linux/amd64
-#    image: amd64/mongo:latest
-    image: mongo:latest
+    platform: linux/amd64
+    image: mongodb/mongodb-community-server:latest
     restart: always
     env_file: ./.env
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=$DB_NAME
-      - MONGO_INITDB_ROOT_PASSWORD=$DB_PASS
+#    environment:
+#      - MONGO_INITDB_ROOT_USERNAME=$DB_NAME
+#      - MONGO_INITDB_ROOT_PASSWORD=$DB_PASS
     ports:
       - "27017:27017"
     volumes:
-      - /opt/homebrew/var/mongodb:/data/db
-#      - ./etc/mongod.conf:/etc/mongod.conf
-#    entrypoint: ["mongod","--config","/etc/mongod.conf"]
-    networks:
-      - express-mongo
-networks:
-  express-mongo:
+      - type: bind
+        source: ./data
+        target: /data/db
+#      - /opt/homebrew/var/mongodb:/data/db
+    #      - ./etc/mongod.conf:/etc/mongod.conf
+    #    entrypoint: ["mongod","--config","/etc/mongod.conf"]
+#    networks:
+#      - express-mongo
+#  networks:
+#    express-mongo:

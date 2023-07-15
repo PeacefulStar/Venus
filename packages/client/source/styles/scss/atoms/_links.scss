@@ -1,6 +1,6 @@
 @import "../utilities/variables";
 
-.home-link {
+.home_link {
   background: url("#{$img-path}logo.png") center/contain no-repeat;
   width: 22px;
   height: 40px;
@@ -10,7 +10,7 @@
   white-space: nowrap;
 }
 
-.global-link {
+.global_link {
   height: 40px;
   line-height: 40px;
   padding: 0 10px;
