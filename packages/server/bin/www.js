@@ -10,21 +10,20 @@ const http = require('http');
 const https = require('https');
 const fs = require('fs');
 // const path = require('path');
-const dns = require('dns');
-const {Resolver} = require('dns');
+// const dns = require('dns');
+// const {Resolver} = require('dns');
+// const resolver = new Resolver();
 
-const resolver = new Resolver();
 require('dotenv').config({path: '../../../.env'});
 
-const options = {
-    family: 4,
-    hints: dns.ADDRCONFIG || dns.V4MAPPED,
-};
+// const options = {
+//     family: 4,
+//     hints: dns.ADDRCONFIG || dns.V4MAPPED,
+// };
 
 /**
  * Get port from environment and store in Express.
  */
-console.log('27', process.env.PORT, process.env.NODE_ENV, process.env.DB_NAME);
 
 const port = normalizePort(process.env.PORT);
 app.set('port', port);
@@ -38,7 +37,6 @@ const server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
-console.log(port);
 server.listen(port, () => console.log(`Server is listening on port: ${port}`));
 server.on('error', onError);
 server.on('listening', onListening);

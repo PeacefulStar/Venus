@@ -3,7 +3,7 @@ const express = require('express');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const config = require('../client/config/webpack.dev');
 const compiler = webpack(config);
 require('dotenv').config({path: '../../.env'});
@@ -41,8 +41,15 @@ app.get('*', (req, res) => {
     });
 });
 
-// mongoose.connect(`mongodb://127.0.0.1:${process.env.DB_PORT}/${process.env.DB_NAME}`, )
-//   .then(() => console.log('mongoose connection successful'))
-//   .catch((err) => console.error('mongoose', err));
+let ip;
+if (process.env.NODE_ENV === 'development') {
+  ip = '127.0.0.1';
+} else if (process.env.NODE_ENV === 'virtual') {
+  ip = 'mongo'
+}
+
+mongoose.connect(`mongodb://${ip}:${process.env.DB_PORT}/${process.env.DB_NAME}`, )
+  .then(() => console.log('mongoose connection successful'))
+  .catch((err) => console.error('mongoose', err));
 
 app.listen(port, () => console.log(`Server is listening on port: ${port}`));

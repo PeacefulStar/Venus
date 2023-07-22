@@ -1,6 +1,6 @@
 services:
   os:
-    container_name: centos
+    container_name: almaLinux
     platform: linux/amd64
     build:
       context: .
@@ -15,33 +15,49 @@ services:
     ports:
       - "53:53"
       - "8008:8008"
+    depends_on:
+      - server
+    networks:
+      - os-server
+
+  server:
+    container_name: node
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: devServer
+      args:
+        user: $USER
+        pass: $PASS
+    privileged: true
+    restart: always
+    env_file: ./.env
+    ports:
       - "3000:3000"
-#      - "27018:27017"
     volumes:
-      - /opt/homebrew/var/mongodb:/var/lib/mongo
-      - ./packages:/usr/src/app/packages
+      -  ./packages:/usr/src/app/packages
     depends_on:
       - mongodb
+    networks:
+      - express-mongo
+      - os-server
 
   mongodb:
     container_name: mongo
-    platform: linux/amd64
-    image: mongodb/mongodb-community-server:latest
+    image: mongo:latest
     restart: always
     env_file: ./.env
-#    environment:
-#      - MONGO_INITDB_ROOT_USERNAME=$DB_NAME
-#      - MONGO_INITDB_ROOT_PASSWORD=$DB_PASS
-    ports:
-      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$USER
+      - MONGO_INITDB_ROOT_PASSWORD=$PASS
+    expose:
+      - 27018
     volumes:
-      - type: bind
-        source: ./data
-        target: /data/db
-#      - /opt/homebrew/var/mongodb:/data/db
-    #      - ./etc/mongod.conf:/etc/mongod.conf
-    #    entrypoint: ["mongod","--config","/etc/mongod.conf"]
-#    networks:
-#      - express-mongo
-#  networks:
-#    express-mongo:
+       - ./data:/data/db
+    networks:
+      - express-mongo
+
+networks:
+  express-mongo:
+  os-server:

@@ -3,9 +3,8 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "start": "PORT=80 NODE_ENV=production nodemon index.js  --watch ../client/destination",
-        "watch": "PORT=3000 NODE_ENV=development nodemon index.js",
-        "dev": "NODE_ENV=development nodemon index.js",
+        "start": "nodemon index.js  --watch ../client/destination",
+        "dev": "nodemon index.js",
         "mail": "node mail.js"
     },
     "dependencies": {

@@ -10,3 +10,4 @@ node_modules
 /packages/client/destination/
 /.git/
 .DS_Store
+/data/

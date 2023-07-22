@@ -1,9 +1,7 @@
 'use strict';
 
 const path = require('path'),
-    // glob = require('glob'),
     {merge} = require('webpack-merge'),
-    // MiniCssExtractPlugin = require('mini-css-extract-plugin'),
     {CleanWebpackPlugin} = require('clean-webpack-plugin'),
     OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin'),
     TerserPlugin = require('terser-webpack-plugin');
@@ -17,37 +15,9 @@ module.exports = merge(common, {
     entry: {
         main: [source + '/scripts/index'],
     },
-    // output: {
-    //     path: paths.build,
-    //     publicPath: '/',
-    //     filename: 'js/[name].[contenthash].bundle.js',
-    // },
     plugins: [
         new CleanWebpackPlugin(),
-        // new MiniCssExtractPlugin({
-        //     filename: 'styles/[name].[contenthash].css',
-        //     chunkFilename: '[id].css',
-        // }),
     ],
-    // module: {
-    //     rules: [
-    //         {
-    //             test: /\.(scss|css)$/,
-    //             use: [
-    //                 MiniCssExtractPlugin.loader,
-    //                 {
-    //                     loader: 'css-loader',
-    //                     options: {
-    //                         importLoaders: 2,
-    //                         sourceMap: false,
-    //                     },
-    //                 },
-    //                 'postcss-loader',
-    //                 'sass-loader',
-    //             ],
-    //         },
-    //     ],
-    // },
     optimization: {
         minimize: true,
         minimizer: [new OptimizeCssAssetsPlugin(), new TerserPlugin()],

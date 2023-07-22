@@ -27,7 +27,7 @@
         "@types/react-dom": "^18.0.0",
         "@types/react-router": "^5.1.13",
         "@types/react-router-dom": "^5.1.7",
-        "@types/three": "^0.153.0",
+        "@types/three": "^0.154.0",
         "@types/webpack": "^5.28.0",
         "babel-loader": "^9.0.0",
         "clean-webpack-plugin": "^4.0.0-alpha.0",

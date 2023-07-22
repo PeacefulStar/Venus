@@ -10,21 +10,10 @@ const source = path.join(__dirname, '../source');
 
 module.exports = merge(common, {
     mode: 'development',
-
     devtool: 'inline-source-map',
-
     entry: {
         main: ['webpack-hot-middleware/client', source + '/scripts/index'],
     },
-
-    // devServer: {
-    //     historyApiFallback: true,
-    //     contentBase: paths.build,
-    //     open: true,
-    //     compress: true,
-    //     hot: true,
-    //     port: 8880,
-    // },
 
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
