@@ -7,7 +7,13 @@ const webpack = require('webpack'),
     MiniCssExtractPlugin = require('mini-css-extract-plugin'),
     HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const env = process.env.NODE_ENV;
+let env;
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development') {
+    env = process.env.NODE_ENV;
+} else if (process.env.NODE_ENV === 'virtual') {
+    env = 'development'
+}
+
 const source = path.join(__dirname, '../source');
 
 module.exports = {
@@ -21,9 +27,7 @@ module.exports = {
     },
     plugins: [
         new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify(env),
-            },
+            'process.env.NODE_ENV': JSON.stringify(env)
         }),
         new MiniCssExtractPlugin({
             filename: 'styles/[name].css',

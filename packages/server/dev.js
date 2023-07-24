@@ -45,10 +45,11 @@ let ip;
 if (process.env.NODE_ENV === 'development') {
   ip = '127.0.0.1';
 } else if (process.env.NODE_ENV === 'virtual') {
-  ip = 'mongo'
+  ip = 'mongodb'
 }
 
-mongoose.connect(`mongodb://${ip}:${process.env.DB_PORT}/${process.env.DB_NAME}`, )
+mongoose.connect(`mongodb://${ip}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+  {useNewUrlParser: true, useUnifiedTopology: true,})
   .then(() => console.log('mongoose connection successful'))
   .catch((err) => console.error('mongoose', err));
 

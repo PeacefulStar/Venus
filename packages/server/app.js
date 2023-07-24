@@ -47,7 +47,8 @@ app.use('/graphql', graphql);
 app.use('/.well-known/acme-challenge/', well);
 app.use(express.static(path.join(__dirname, '../client/destination')));
 app.get('*', handleRender);
-mongoose.connect(`mongodb://${process.env.USER}:${process.env.PASS}@127.0.0.1:${process.env.DB_PORT}/${process.env.USER}`, )
+mongoose.connect(`mongodb://${process.env.USER}:${process.env.PASS}@127.0.0.1:${process.env.DB_PORT}/${process.env.USER}`,
+  {useNewUrlParser: true, useUnifiedTopology: true,})
     .then(() => console.log('mongoose connection successful'))
     .catch((err) => console.error('mongoose', err));
 

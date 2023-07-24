@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: devOS
+      target: OS
       args:
         user: $USER
         pass: $PASS
@@ -16,17 +16,17 @@ services:
       - "53:53"
       - "8008:8008"
     depends_on:
-      - server
+      - web
     networks:
-      - os-server
+      - os-web
 
-  server:
+  web:
     container_name: node
     platform: linux/amd64
     build:
       context: .
       dockerfile: Dockerfile
-      target: devServer
+      target: Web
       args:
         user: $USER
         pass: $PASS
@@ -38,13 +38,13 @@ services:
     volumes:
       -  ./packages:/usr/src/app/packages
     depends_on:
-      - mongodb
+      - db
     networks:
-      - express-mongo
-      - os-server
+      - web-db
+      - os-web
 
-  mongodb:
-    container_name: mongo
+  db:
+    container_name: mongodb
     image: mongo:latest
     restart: always
     env_file: ./.env
@@ -52,12 +52,12 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=$USER
       - MONGO_INITDB_ROOT_PASSWORD=$PASS
     expose:
-      - 27018
+      - 27017
     volumes:
        - ./data:/data/db
     networks:
-      - express-mongo
+      - web-db
 
 networks:
-  express-mongo:
-  os-server:
+  web-db:
+  os-web:

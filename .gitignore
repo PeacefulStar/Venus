@@ -8,3 +8,4 @@ node_modules
 /packages/client/source/pdf/
 /etc/
 /data/
+/.env
