@@ -51,12 +51,27 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=$USER
       - MONGO_INITDB_ROOT_PASSWORD=$PASS
+      - MONGO_INITDB_DATABASE=$USER
+    ports:
+      - '6000:27017'
     expose:
       - 27017
     volumes:
-       - ./data:/data/db
+       - mongodb:/data/db
     networks:
       - web-db
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis:/data
+
+volumes:
+  mongodb:
+  redis:
 
 networks:
   web-db:

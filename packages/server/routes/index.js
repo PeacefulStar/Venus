@@ -14,4 +14,4 @@ router.post('/',  (req, res) => {
 //     res.json({message: 'Hello index'});
 // });
 
-module.exports = router;
+export default router;

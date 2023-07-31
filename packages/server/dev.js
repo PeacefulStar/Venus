@@ -1,20 +1,30 @@
-const path = require('path');
-const express = require('express');
-const webpack = require('webpack');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
-const mongoose = require('mongoose');
-const config = require('../client/config/webpack.dev');
-const compiler = webpack(config);
-require('dotenv').config({path: '../../.env'});
+import path from 'path';
+import express from 'express';
+import webpack from 'webpack';
+import webpackDevMiddleware from 'webpack-dev-middleware'
+import webpackHotMiddleware from 'webpack-hot-middleware'
+import mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import config from '../client/config/webpack.dev';
+import dotenv from 'dotenv';
+dotenv.config({path: '../../.env'});
 
 import index from './routes/index';
 import graphql from './routes/graphql';
 import well from './routes/well-known';
 
+const compiler = webpack(config);
 const app = express();
-const port = process.env.PORT;
+const {PORT, NODE_ENV, USER, DB_PORT, TYPE} = process.env;
 
+console.log(PORT, NODE_ENV, USER, DB_PORT, TYPE)
+
+app.use(cookieParser());
+app.use(cors(), bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({extended: false}));
 app.use('/', index);
 app.use('/graphql', graphql);
 app.use('/.well-known/acme-challenge/', well);
@@ -42,15 +52,16 @@ app.get('*', (req, res) => {
 });
 
 let ip;
-if (process.env.NODE_ENV === 'development') {
-  ip = '127.0.0.1';
-} else if (process.env.NODE_ENV === 'virtual') {
+if (TYPE === 'virtual') {
   ip = 'mongodb'
+} else {
+  ip = '127.0.0.1';
 }
+console.log(ip)
 
-mongoose.connect(`mongodb://${ip}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+mongoose.connect(`mongodb://${ip}:${DB_PORT}/${USER}`,
   {useNewUrlParser: true, useUnifiedTopology: true,})
   .then(() => console.log('mongoose connection successful'))
   .catch((err) => console.error('mongoose', err));
 
-app.listen(port, () => console.log(`Server is listening on port: ${port}`));
+app.listen(PORT, () => console.log(`Server is listening on port: ${PORT}`));

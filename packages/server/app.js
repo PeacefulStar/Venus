@@ -3,16 +3,18 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import fs from 'fs';
-import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-require('dotenv').config({path: '../../.env'});
+import dotenv from 'dotenv';
+dotenv.config({path: '../../.env'});
 
 import index from './routes/index';
 import graphql from './routes/graphql';
 import well from './routes/well-known';
+
+const {USER, PASS, DB_PORT} = process.env;
 
 const handleRender = (req, res) => {
     const html = ReactDOMServer.renderToString();
@@ -47,7 +49,7 @@ app.use('/graphql', graphql);
 app.use('/.well-known/acme-challenge/', well);
 app.use(express.static(path.join(__dirname, '../client/destination')));
 app.get('*', handleRender);
-mongoose.connect(`mongodb://${process.env.USER}:${process.env.PASS}@127.0.0.1:${process.env.DB_PORT}/${process.env.USER}`,
+mongoose.connect(`mongodb://${USER}:${PASS}@127.0.0.1:${DB_PORT}/${USER}`,
   {useNewUrlParser: true, useUnifiedTopology: true,})
     .then(() => console.log('mongoose connection successful'))
     .catch((err) => console.error('mongoose', err));

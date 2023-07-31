@@ -7,13 +7,8 @@ const webpack = require('webpack'),
     MiniCssExtractPlugin = require('mini-css-extract-plugin'),
     HtmlWebpackPlugin = require('html-webpack-plugin');
 
-let env;
-if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'development') {
-    env = process.env.NODE_ENV;
-} else if (process.env.NODE_ENV === 'virtual') {
-    env = 'development'
-}
-
+let env = process.env.NODE_ENV;
+console.log(env, 11)
 const source = path.join(__dirname, '../source');
 
 module.exports = {
@@ -23,7 +18,7 @@ module.exports = {
         publicPath: '/',
         filename: 'scripts/[name].js',
         // hotUpdateChunkFilename: 'hot/hot-update.js',
-        hotUpdateMainFilename: 'hot/[hash].hot-update.json',
+        // hotUpdateMainFilename: 'hot/[hash].hot-update.json',
     },
     plugins: [
         new webpack.DefinePlugin({

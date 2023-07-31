@@ -9,6 +9,7 @@
         "test": "jest"
     },
     "dependencies": {
+        "@apollo/client": "^3.7.17",
         "@react-three/drei": "^9.65.3",
         "@react-three/fiber": "^8.9.1",
         "core-js": "^3.24.1",
@@ -19,7 +20,7 @@
         "react-dom": "^18.0.0",
         "react-router": "^6.0.1",
         "react-router-dom": "^6.0.1",
-        "three": "^0.154.0"
+        "three": "^0.155.0"
     },
     "devDependencies": {
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.1",

@@ -72,4 +72,4 @@ router.get('/eAhSU1WCytGk_YiU25jvextL56HmRGxLDPsBwQe0CWI', (req, res) => {
     );
 });
 
-module.exports = router;
+export default router;
