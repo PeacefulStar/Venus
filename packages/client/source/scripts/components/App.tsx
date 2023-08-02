@@ -9,8 +9,8 @@ import Contact from './Contact';
 import SignUp from './SignUp';
 import Login from './Login';
 import Resume from './Resume';
-import MyNumber from './MyNumber';
-// import Navigation from './Navigation';
+// import MyNumber from './MyNumber';
+import Navigation from './Navigation';
 import NotFound from './NotFound';
 import {AddEmployee} from './AddEmployee';
 import {EditEmployee} from './EditEmployee';
@@ -30,9 +30,9 @@ const App: React.FunctionComponent = () => {
     // unlisten();
     return (
         <>
-            {/*<header>*/}
-            {/*    <Navigation />*/}
-            {/*</header>*/}
+            <header>
+                <Navigation />
+            </header>
             <main>
                 <GlobalProvider>
                     <Routes>
@@ -43,7 +43,7 @@ const App: React.FunctionComponent = () => {
                         <Route path={'/signup'} element={<SignUp />} />
                         <Route path={'/login'} element={<Login />} />
                         <Route path={'/resume'} element={<Resume />} />
-                        <Route path={'/mynumber'} element={<MyNumber />} />
+                        {/*<Route path={'/mynumber'} element={<MyNumber />} />*/}
                         <Route path="/add" element={<AddEmployee />} />
                         <Route path="/edit/:id" element={<EditEmployee />} />
                         <Route path="/list" element={<EmployeeList />} />
