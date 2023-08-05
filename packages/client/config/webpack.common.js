@@ -7,8 +7,6 @@ const webpack = require('webpack'),
     MiniCssExtractPlugin = require('mini-css-extract-plugin'),
     HtmlWebpackPlugin = require('html-webpack-plugin');
 
-let env = process.env.NODE_ENV;
-console.log(env, 11)
 const source = path.join(__dirname, '../source');
 
 module.exports = {
@@ -22,7 +20,7 @@ module.exports = {
     },
     plugins: [
         new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(env)
+            'process.env': JSON.stringify(process.env)
         }),
         new MiniCssExtractPlugin({
             filename: 'styles/[name].css',

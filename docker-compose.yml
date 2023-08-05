@@ -58,16 +58,9 @@ services:
       - 27017
     volumes:
        - mongodb:/data/db
+    command: [--auth]
     networks:
       - web-db
-
-  redis:
-    container_name: redis
-    image: redis:latest
-    ports:
-      - '6379:6379'
-    volumes:
-      - redis:/data
 
 volumes:
   mongodb:

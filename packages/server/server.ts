@@ -1,7 +1,7 @@
 import express from 'express';
 import webpack from 'webpack';
-import webpackDevMiddleware from 'webpack-dev-middleware'
-import webpackHotMiddleware from 'webpack-hot-middleware'
+import webpackDevMiddleware from 'webpack-dev-middleware';
+import webpackHotMiddleware from 'webpack-hot-middleware';
 import mongoose from 'mongoose';
 import http from 'http';
 import https from 'https';
@@ -23,15 +23,21 @@ import well from './routes/well-known';
 
 dotenv.config({path: '../../.env'});
 
-const { NODE_ENV, USER, DB_PORT, TYPE} = process.env;
+const {PORT, NODE_ENV, USER, PASS, DB_PORT, TYPE} = process.env;
+console.log(PORT, NODE_ENV, USER, PASS, DB_PORT, TYPE)
 const app = express();
 const compiler = webpack(config);
+
+const corsOptions = {
+  origin: ['https://peacefulstar.art', 'https://studio.apollographql.com', 'http://localhost:3000'],
+  credentials: true,
+};
 
 app.use(logger('combined'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(cors(), bodyParser.json());
+app.use(cors(corsOptions), bodyParser.json());
 app.use('/.well-known/acme-challenge/', well);
 app.use(
   webpackDevMiddleware(compiler, {
@@ -55,7 +61,9 @@ app.use(
     ip = '127.0.0.1';
   }
 
-  await mongoose.connect(`mongodb://${ip}:${DB_PORT}/${USER}`,)
+  const url = `mongodb://${USER}:${PASS}@${ip}:${DB_PORT}`;
+
+  await mongoose.connect(url,)
     .then(() => console.log('mongoose connection successful'))
     .catch((err) => console.error('mongoose', err));
 
@@ -65,13 +73,12 @@ app.use(
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-    // context: async ({ req, res }) => ({ req, res, getAuthUser }),
   });
 
   await apolloServer.start();
 
   app.use('/graphql', expressMiddleware(apolloServer, {
-    context: async ({ req }) => ({ token: req.headers.token }),
+    context: async ({ req, res }) => ({ req, res}),
   }));
 
   app.get('*', (req, res) => {
@@ -79,7 +86,7 @@ app.use(
     compiler.outputFileSystem.readFile(filename, (err, result) => {
       res.set('content-type', 'text/html');
       res.send(result);
-      // res.end();
+      res.end();
     });
   });
 
@@ -99,6 +106,6 @@ app.use(
     // console.log('HTTPS Server running on port 443');
   } else if (NODE_ENV === 'development') {
     await new Promise<void>((resolve) => httpServer.listen(3000, resolve));
-    // console.log('Server running on port 3000');
+    console.log('Server running on port 3000');
   }
 })();

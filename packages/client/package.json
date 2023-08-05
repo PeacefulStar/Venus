@@ -12,6 +12,7 @@
         "@apollo/client": "^3.7.17",
         "@react-three/drei": "^9.65.3",
         "@react-three/fiber": "^8.9.1",
+        "@react-three/xr": "^5.6.2",
         "core-js": "^3.24.1",
         "cross-fetch": "^4.0.0",
         "history": "^5.0.0",

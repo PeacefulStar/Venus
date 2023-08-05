@@ -2,11 +2,17 @@ import {gql} from 'graphql-tag';
 
 const typeDefs = gql`
   scalar Date
+  input UserInput {
+      name: String!
+      email: String!
+      password: String!
+  }
   type User {
-    _id: String!
-    email: String
-    password: String
-    cretedAt: Date
+      _id: String!
+      name: String
+      email: String
+      password: String
+      cretedAt: Date
   }
   type IsAuthenticated {
     status: Int!
@@ -14,29 +20,27 @@ const typeDefs = gql`
   type SignIn {
     isAuthenticated: Boolean!
   }
+  type SignOut {
+      status: Int!
+  }
   type CreateAccountPayload {
     _id: String!
     token: String!
     email: String!
   }
-  input UserCredens {
-    email: String!
-    password: String!
-  }
+  
   input GetUserByEmail {
     email: String!
   }
-  type SignOutUser {
-    status: Int!
-  }
+  
   type Query {
     getUserByEmail(input: GetUserByEmail): User
     isAuthenticated: IsAuthenticated
   }
   type Mutation {
-    createUser(input: UserCredens): CreateAccountPayload!
-    signInUser(input: UserCredens): SignIn!
-    signOutUser: SignOutUser!
+    createUser(input: UserInput): CreateAccountPayload!
+    signInUser(input: UserInput): SignIn!
+    signOutUser: SignOut
   }
 `;
 
