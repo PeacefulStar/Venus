@@ -7,7 +7,7 @@ import Reality from './Reality';
 import Ocean from './Ocean';
 import Contact from './Contact';
 import SignUp from './SignUp';
-import Login from './Login';
+import SignIn from './SignIn';
 import Resume from './Resume';
 // import MyNumber from './MyNumber';
 import Navigation from './Navigation';
@@ -22,7 +22,6 @@ import '../../styles/scss/main.module.scss';
 const App: React.FunctionComponent = () => {
     // let history = useHistory();
     // let location = history.location;
-    console.log('load')
 
     // let unlisten = history.listen(({location, action}) => {
     //     console.log(action, location.pathname, location.state);
@@ -41,7 +40,7 @@ const App: React.FunctionComponent = () => {
                         <Route path={'/ocean'} element={<Ocean />} />
                         <Route path={'/contact'} element={<Contact />} />
                         <Route path={'/signup'} element={<SignUp />} />
-                        <Route path={'/login'} element={<Login />} />
+                        <Route path={'/signin'} element={<SignIn />} />
                         <Route path={'/resume'} element={<Resume />} />
                         {/*<Route path={'/mynumber'} element={<MyNumber />} />*/}
                         <Route path="/add" element={<AddEmployee />} />

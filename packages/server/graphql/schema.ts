@@ -2,8 +2,12 @@ import {gql} from 'graphql-tag';
 
 const typeDefs = gql`
   scalar Date
-  input UserInput {
+  input Create {
       name: String!
+      email: String!
+      password: String!
+  }
+  input Sign {
       email: String!
       password: String!
   }
@@ -38,8 +42,8 @@ const typeDefs = gql`
     isAuthenticated: IsAuthenticated
   }
   type Mutation {
-    createUser(input: UserInput): CreateAccountPayload!
-    signInUser(input: UserInput): SignIn!
+    createUser(input: Create): CreateAccountPayload!
+    signInUser(input: Sign): SignIn!
     signOutUser: SignOut
   }
 `;

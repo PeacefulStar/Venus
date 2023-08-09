@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "start": "nodemon index.js  --watch ../client/destination",
+        "start": "nodemon server.ts  --watch ../client/destination",
         "dev": "nodemon server.ts",
         "mail": "node mail.js"
     },

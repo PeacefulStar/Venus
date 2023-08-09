@@ -26,8 +26,8 @@ const Navigation: React.FunctionComponent = () => {
                 </ul>
             </div>
             <div className={style.right_nav}>
-                <Link to={'/signup'}>SignUp</Link>
-                <Link to={'/login'}>Login</Link>
+                <Link to={'/signup'}>Sign Up</Link>
+                <Link to={'/signin'}>Sign In</Link>
             </div>
         </nav>
     );

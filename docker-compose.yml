@@ -58,6 +58,7 @@ services:
       - 27017
     volumes:
        - mongodb:/data/db
+#       - ./init-mongodb:/docker-entrypoint-initdb.d
     command: [--auth]
     networks:
       - web-db
