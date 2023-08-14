@@ -43,12 +43,10 @@ const getStatus = (token: string, tokens: string[]): number => {
 
 const resolvers = {
   Query: {
-    // async getUserByEmail(_: any, args: any): Promise<object> {
-    //   const {
-    //     input: {email},
-    //   } = args;
-    //   return User.findOne({email}) as any;
-    // },
+    async getUser(_: any, args: any): Promise<object> {
+      const {input: {email}} = args;
+      return User.findOne({email}) as any;
+    },
     async isAuthenticated(_: any, _args: any, ctx: any): Promise<object> {
       const token: string = ctx.req.cookies['x-access-token'];
       const tokens: string[] = await Token.find({tags: token});
@@ -64,15 +62,11 @@ const resolvers = {
         }
         ctx.res.clearCookie(TOKEN_KEY);
       }
-      return {
-        status,
-      };
+      return {status};
     },
   },
   Mutation: {
     createUser: async (_: any, args: any, ctx: any): Promise<object> => {
-      console.log(args, 74)
-      // console.log(ctx, 75)
       const {input: {name, email, password},} = args;
       const salt = bcrypt.genSaltSync(10);
 
@@ -92,12 +86,10 @@ const resolvers = {
         ctx.res.cookie(TOKEN_KEY, JSON.stringify(token), cookieOpts);
         return {token};
       } catch (error: any) {
-        console.log(error, 95)
         throw new Error(error.message);
       }
     },
     signInUser: async (_: any, args: any, ctx: any): Promise<object> => {
-      console.log(args, 100)
       const {input: {email, password}} = args;
 
       try {

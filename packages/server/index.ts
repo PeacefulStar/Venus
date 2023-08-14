@@ -19,6 +19,7 @@ import dotenv from 'dotenv';
 import config from '../client/config/webpack.dev';
 import typeDefs from './graphql/schema';
 import resolvers from './graphql/resolvers';
+import ask from './routes/ask';
 import well from './routes/well-known';
 
 dotenv.config({path: '../../.env'});
@@ -29,7 +30,7 @@ const app = express();
 const compiler = webpack(config);
 
 const corsOptions = {
-  origin: ['https://peacefulstar.art', 'https://studio.apollographql.com', 'http://localhost:3000'],
+  origin: ['https://peacefulstar.art', 'https://studio.apollographql.com', 'http://localhost:3000', 'http://127.0.0.1:3000'],
   credentials: true,
 };
 
@@ -38,6 +39,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(cors(corsOptions), bodyParser.json());
+app.use('/ask/', ask);
 app.use('/.well-known/acme-challenge/', well);
 app.use(
   webpackDevMiddleware(compiler, {
