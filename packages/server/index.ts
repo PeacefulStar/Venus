@@ -11,40 +11,45 @@ import cookieParser from 'cookie-parser';
 import path from 'path';
 import fs from 'fs';
 import logger from 'morgan';
-import { ApolloServer } from '@apollo/server';
-import { expressMiddleware } from '@apollo/server/express4';
-import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import {ApolloServer} from '@apollo/server';
+import {expressMiddleware} from '@apollo/server/express4';
+import {ApolloServerPluginDrainHttpServer} from '@apollo/server/plugin/drainHttpServer';
 import dotenv from 'dotenv';
 
 import config from '../client/config/webpack.dev';
 import typeDefs from './graphql/schema';
 import resolvers from './graphql/resolvers';
-import ask from './routes/ask';
-import well from './routes/well-known';
+// import ask from './routes/ask';
+// import well from './routes/well-known';
 
-dotenv.config({path: '../../.env'});
+dotenv.config({ path: '../../.env' });
 
-const {PORT, NODE_ENV, USER, PASS, DB_PORT, TYPE} = process.env;
-console.log(PORT, NODE_ENV, USER, PASS, DB_PORT, TYPE)
+const { PORT, NODE_ENV, USER, PASS, DB_PORT, TYPE } = process.env;
+console.log(PORT, NODE_ENV, USER, PASS, DB_PORT, TYPE);
 const app = express();
 const compiler = webpack(config);
 
 const corsOptions = {
-  origin: ['https://peacefulstar.art', 'https://studio.apollographql.com', 'http://localhost:3000', 'http://127.0.0.1:3000'],
+  origin: [
+    'https://peacefulstar.art',
+    'https://studio.apollographql.com',
+    'http://localhost:3000',
+    // 'http://127.0.0.1:3000',
+  ],
   credentials: true,
 };
 
 app.use(logger('combined'));
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors(corsOptions), bodyParser.json());
-app.use('/ask/', ask);
-app.use('/.well-known/acme-challenge/', well);
+// app.use('/ask/', ask);
+// app.use('/.well-known/acme-challenge/', well);
 app.use(
   webpackDevMiddleware(compiler, {
     publicPath: config.output.publicPath,
-  })
+  }),
 );
 
 app.use(
@@ -52,20 +57,21 @@ app.use(
     log: false,
     path: '/__webpack_hmr',
     heartbeat: 10 * 1000,
-  })
+  }),
 );
 
 (async () => {
   let ip: string;
   if (TYPE === 'virtual') {
-    ip = 'mongodb'
+    ip = 'mongodb';
   } else {
     ip = '127.0.0.1';
   }
 
   const url = `mongodb://${USER}:${PASS}@${ip}:${DB_PORT}/${USER}`;
 
-  await mongoose.connect(url)
+  await mongoose
+    .connect(url)
     .then(() => console.log('mongoose connection successful'))
     .catch((err) => console.error('mongoose', err));
 
@@ -79,11 +85,16 @@ app.use(
 
   await apolloServer.start();
 
-  app.use('/graphql', expressMiddleware(apolloServer, {
-    context: async ({ req, res }) => ({ req, res}),
-  }));
+  app.use(
+    '/graphql',
+    expressMiddleware(apolloServer, {
+      context: async ({ req, res }) => ({ req, res }),
+    }),
+  );
 
   app.get('*', (req, res) => {
+    console.log(req.protocol, 96);
+    console.log(req.headers, 97);
     const filename = path.join(compiler.outputPath, 'index.html');
     compiler.outputFileSystem.readFile(filename, (err, result) => {
       res.set('content-type', 'text/html');
@@ -97,11 +108,15 @@ app.use(
     // console.log('HTTP Server running on port 80');
 
     const credentials = {
-      key: fs.readFileSync('/etc/letsencrypt/live/peacefulstar.art-0001/privkey.pem'),
+      key: fs.readFileSync(
+        '/etc/letsencrypt/live/peacefulstar.art-0001/privkey.pem',
+      ),
       cert: fs.readFileSync(
         '/etc/letsencrypt/live/peacefulstar.art-0001/fullchain.pem',
       ),
-      ca: fs.readFileSync('/etc/letsencrypt/live/peacefulstar.art-0001/chain.pem'),
+      ca: fs.readFileSync(
+        '/etc/letsencrypt/live/peacefulstar.art-0001/chain.pem',
+      ),
     };
     const httpsServer = https.createServer(credentials, app);
     await new Promise<void>((resolve) => httpsServer.listen(443, resolve));

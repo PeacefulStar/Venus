@@ -1,11 +1,18 @@
-import jwt, {Algorithm} from 'jsonwebtoken';
+import jwt, { Algorithm } from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
+import { Configuration, OpenAIApi } from 'openai';
 import User from '..//models/user';
 import Token from '../models/token';
+import Ai from '../models/ai';
 
-dotenv.config({path: '../../../.env'});
-const {JWT_SECRET} = process.env;
+dotenv.config({ path: '../../../.env' });
+const { JWT_SECRET, OPENAI_API_KEY } = process.env;
+
+const configuration = new Configuration({
+  apiKey: OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
 
 const TOKEN_KEY = 'x-access-token';
 const cookieOpts = {
@@ -44,15 +51,17 @@ const getStatus = (token: string, tokens: string[]): number => {
 const resolvers = {
   Query: {
     async getUser(_: any, args: any): Promise<object> {
-      const {input: {email}} = args;
-      return User.findOne({email}) as any;
+      const {
+        input: { email },
+      } = args;
+      return User.findOne({ email }) as any;
     },
     async isAuthenticated(_: any, _args: any, ctx: any): Promise<object> {
       const token: string = ctx.req.cookies['x-access-token'];
-      const tokens: string[] = await Token.find({tags: token});
+      const tokens: string[] = await Token.find({ tags: token });
       const status: number = getStatus(
         ctx.req.cookies['x-access-token'],
-        tokens
+        tokens,
       );
       if (status === 401) {
         if (token) {
@@ -62,45 +71,52 @@ const resolvers = {
         }
         ctx.res.clearCookie(TOKEN_KEY);
       }
-      return {status};
+      return { status };
     },
   },
   Mutation: {
     createUser: async (_: any, args: any, ctx: any): Promise<object> => {
-      const {input: {name, email, password},} = args;
+      const {
+        input: { name, email, password },
+      } = args;
       const salt = bcrypt.genSaltSync(10);
 
       try {
         const user = await User.create({
           name,
           email,
-          password: bcrypt.hashSync(password, salt)
+          password: bcrypt.hashSync(password, salt),
         });
 
         const token = jwt.sign(
-          {_id: user._id, email: user.email},
+          { id: user.id, email: user.email },
           JWT_SECRET as Algorithm,
-          {expiresIn: '1d'}
+          { expiresIn: '1d' },
         );
 
         ctx.res.cookie(TOKEN_KEY, JSON.stringify(token), cookieOpts);
-        return {token};
+        return { token };
       } catch (error: any) {
         throw new Error(error.message);
       }
     },
     signInUser: async (_: any, args: any, ctx: any): Promise<object> => {
-      const {input: {email, password}} = args;
+      const {
+        input: { email, password },
+      } = args;
 
       try {
-        const user: any = await User.findOne({email});
+        const user: any = await User.findOne({ email });
 
-        const isValidPassword: boolean = bcrypt.compareSync(password, user.password);
+        const isValidPassword: boolean = bcrypt.compareSync(
+          password,
+          user.password,
+        );
         if (isValidPassword) {
           const token = jwt.sign(
-            {_id: user._id, email: user.email},
+            { _id: user._id, email: user.email },
             JWT_SECRET as Algorithm,
-            {expiresIn: '1d'}
+            { expiresIn: '1d' },
           );
           ctx.res.cookie(TOKEN_KEY, JSON.stringify(token), cookieOpts);
         }
@@ -108,7 +124,6 @@ const resolvers = {
           isAuthenticated: isValidPassword,
         };
       } catch (error: any) {
-        console.log(error, 119)
         throw new Error(error.message);
       }
     },
@@ -123,6 +138,34 @@ const resolvers = {
       return {
         status: 200,
       };
+    },
+    chat: async (_: any, args: any): Promise<any> => {
+      const {
+        input: { question },
+      } = args;
+
+      if (question) {
+        const answer = await openai
+          .createCompletion({
+            model: 'text-davinci-003',
+            prompt: question,
+            temperature: 0,
+            max_tokens: 7,
+          })
+          .then((res) => {
+            return res.data.choices[0].text;
+          })
+          .catch((err) => {
+            throw new Error(err);
+          });
+        await Ai.create({
+          question,
+          answer,
+        });
+        return {
+          answer: answer,
+        };
+      }
     },
   },
 };

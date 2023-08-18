@@ -1,9 +1,13 @@
 {
   "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "module": "commonjs",
-    "target": "esnext",
     "sourceMap": true,
     "moduleResolution": "node",
     "esModuleInterop": true,

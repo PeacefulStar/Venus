@@ -13,7 +13,7 @@ const root = createRoot(document.getElementById('root'));
 const generateUri = () => {
   return process.env.NODE_ENV === 'production'
     ? 'https://peacefulstar.art/graphql'
-    : 'http://localhost:3000/graphql';
+    : 'http://localhost:3010/graphql';
 };
 
 const client = new ApolloClient({

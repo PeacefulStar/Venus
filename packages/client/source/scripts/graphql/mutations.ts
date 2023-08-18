@@ -23,3 +23,11 @@ export const SIGN_OUT_USER = gql`
     }
   }
 `;
+
+export const CHAT = gql`
+  mutation Chat($question: String!) {
+    chat(input: { question: $question }) {
+      answer
+    }
+  }
+`;
