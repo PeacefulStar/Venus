@@ -1,18 +1,44 @@
 import jwt, { Algorithm } from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
-import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
+// import {
+//   generateRegistrationOptions,
+//   verifyRegistrationResponse,
+//   generateAuthenticationOptions,
+//   verifyAuthenticationResponse,
+// } from '@simplewebauthn/server';
+// import { Fido2Lib } from 'fido2-lib';
+// import { coerceToArrayBuffer, coerceToBase64Url } from 'fido2-lib/lib/utils';
 import User from '..//models/user';
+import Registration from '../models/registration';
 import Token from '../models/token';
-import Ai from '../models/ai';
+import Chat from '../models/chat';
 
-dotenv.config({ path: '../../../.env' });
-const { JWT_SECRET, OPENAI_API_KEY } = process.env;
+dotenv.config({ path: '../../.env' });
+const { JWT_SECRET, NODE_ENV, OPENAI_API_KEY } = process.env;
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: OPENAI_API_KEY,
 });
-const openai = new OpenAIApi(configuration);
+console.log(NODE_ENV);
+
+// const rp =
+//   NODE_ENV === 'production'
+//     ? 'https://peacefulstar.art'
+//     : 'http://localhost:3000';
+//
+// const f2l = new Fido2Lib({
+//   timeout: 6000,
+//   rpId: rp,
+//   rpName: 'ACME',
+//   challengeSize: 128,
+//   attestation: 'direct',
+//   cryptoParams: [-7, -257, -35, -36, -258, -259, -37, -38, -39, -8],
+//   authenticatorAttachment: 'platform',
+//   authenticatorRequireResidentKey: false,
+//   authenticatorUserVerification: 'required',
+// });
 
 const TOKEN_KEY = 'x-access-token';
 const cookieOpts = {
@@ -56,6 +82,12 @@ const resolvers = {
       } = args;
       return User.findOne({ email }) as any;
     },
+    async getRegistration(_: any, args: any): Promise<object> {
+      const {
+        input: { mail },
+      } = args;
+      return Registration.findOne({ mail }) as any;
+    },
     async isAuthenticated(_: any, _args: any, ctx: any): Promise<object> {
       const token: string = ctx.req.cookies['x-access-token'];
       const tokens: string[] = await Token.find({ tags: token });
@@ -75,6 +107,18 @@ const resolvers = {
     },
   },
   Mutation: {
+    // createRegistration: async (
+    //   _: any,
+    //   args: any,
+    //   ctx: any,
+    // ): Promise<object> => {
+    //   const {
+    //     input: { mail },
+    //   } = args;
+    //   console.log(mail, 88);
+    //
+    //   return {};
+    // },
     createUser: async (_: any, args: any, ctx: any): Promise<object> => {
       const {
         input: { name, email, password },
@@ -145,20 +189,21 @@ const resolvers = {
       } = args;
 
       if (question) {
-        const answer = await openai
-          .createCompletion({
-            model: 'text-davinci-003',
-            prompt: question,
-            temperature: 0,
-            max_tokens: 7,
+        const answer = await openai.chat.completions
+          .create({
+            model: 'gpt-3.5-turbo',
+            messages: [{ role: 'user', content: question }],
+            // temperature: 0,
+            // max_tokens: 1000,
           })
           .then((res) => {
-            return res.data.choices[0].text;
+            return res.choices[0].message.content;
           })
           .catch((err) => {
             throw new Error(err);
           });
-        await Ai.create({
+        console.log(answer, 160);
+        await Chat.create({
           question,
           answer,
         });

@@ -8,6 +8,14 @@ export const GET_USER = gql`
   }
 `;
 
+export const GET_Registration = gql`
+  query GetRegistration($mail: String!) {
+    getRegistration(input: { mail: $mail }) {
+      id
+    }
+  }
+`;
+
 export const IS_AUTHENTICATED = gql`
   query IsAuthenticated {
     isAuthenticated {

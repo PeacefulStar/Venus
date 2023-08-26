@@ -8,7 +8,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 
-const root = createRoot(document.getElementById('root'));
+const root = createRoot(document.getElementById('root') as Element);
 
 const generateUri = () => {
   return process.env.NODE_ENV === 'production'
@@ -25,9 +25,9 @@ const client = new ApolloClient({
 root.render(
   <ApolloProvider client={client}>
     <BrowserRouter>
-      <App/>
+      <App />
     </BrowserRouter>
-  </ApolloProvider>
+  </ApolloProvider>,
 );
 
 // if (module.hot) {

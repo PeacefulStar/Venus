@@ -22,8 +22,15 @@
     "noImplicitThis": true,
     "noImplicitReturns": true,
     "strictNullChecks": true,
-    "jsx": "react"
+    "jsx": "react",
+    "rootDir": "."
+    //    "checkJs": true,
+    //    "noUnusedLocals": true
   },
+  "typeRoots": [
+    "node_modules/@types",
+    "packages/**/*"
+  ],
   "include": [
     "packages/**/*"
   ],

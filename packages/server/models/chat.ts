@@ -1,11 +1,11 @@
 import { model, Schema } from 'mongoose';
 
-interface IAI {
+interface IChat {
   question: string;
   answer: string;
 }
 
-const aiSchema = new Schema<IAI>(
+const chatSchema = new Schema<IChat>(
   {
     question: {
       type: String,
@@ -24,6 +24,6 @@ const aiSchema = new Schema<IAI>(
   { timestamps: true },
 );
 
-const AI = model<IAI>('ai', aiSchema);
+const Chat = model<IChat>('chat', chatSchema);
 
-export default AI;
+export default Chat;

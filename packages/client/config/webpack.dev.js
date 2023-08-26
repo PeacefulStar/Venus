@@ -1,9 +1,9 @@
 'use strict';
 
 const webpack = require('webpack'),
-    path = require('path'),
-    {merge} = require('webpack-merge'),
-    ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+  path = require('path'),
+  {merge} = require('webpack-merge'),
+  ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 const common = require('./webpack.common.js');
 const source = path.join(__dirname, '../source');

@@ -8,12 +8,14 @@ import https from 'https';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
 import path from 'path';
 import fs from 'fs';
 import logger from 'morgan';
-import {ApolloServer} from '@apollo/server';
-import {expressMiddleware} from '@apollo/server/express4';
-import {ApolloServerPluginDrainHttpServer} from '@apollo/server/plugin/drainHttpServer';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import dotenv from 'dotenv';
 
 import config from '../client/config/webpack.dev';
@@ -75,6 +77,27 @@ app.use(
     .then(() => console.log('mongoose connection successful'))
     .catch((err) => console.error('mongoose', err));
 
+  app.use(
+    session({
+      name: 'session',
+      secret: 'secret',
+      resave: false,
+      saveUninitialized: false,
+      proxy: true,
+      store: MongoStore.create({
+        mongoUrl: url,
+        ttl: 14 * 24 * 60 * 60, // = 14 days. Default
+      }),
+      cookie: {
+        secure: NODE_ENV !== 'development',
+        path: '/',
+        sameSite: 'strict',
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year
+      },
+    }),
+  );
+
   const httpServer = http.createServer(app);
 
   const apolloServer = new ApolloServer({
@@ -93,8 +116,8 @@ app.use(
   );
 
   app.get('*', (req, res) => {
-    console.log(req.protocol, 96);
-    console.log(req.headers, 97);
+    console.log(req.protocol, 119);
+    console.log(req.headers, 120);
     const filename = path.join(compiler.outputPath, 'index.html');
     compiler.outputFileSystem.readFile(filename, (err, result) => {
       res.set('content-type', 'text/html');

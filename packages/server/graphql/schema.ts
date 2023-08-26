@@ -10,6 +10,11 @@ const typeDefs = gql`
     password: String
     createdAt: Date
   }
+  type Registration {
+    id: ID!
+    mail: String
+    createdAt: Date
+  }
   type IsAuthenticated {
     status: Int!
   }
@@ -32,6 +37,9 @@ const typeDefs = gql`
   input GetUser {
     email: String!
   }
+  input WebAuthn {
+    mail: String!
+  }
   input Create {
     name: String!
     email: String!
@@ -46,10 +54,12 @@ const typeDefs = gql`
   }
 
   type Query {
+    getRegistration(input: WebAuthn): Registration
     getUser(input: GetUser): User
     isAuthenticated: IsAuthenticated
   }
   type Mutation {
+    createRegistration(input: WebAuthn): Registration
     createUser(input: Create): CreateAccountPayload!
     signInUser(input: Sign): SignIn!
     signOutUser: SignOut

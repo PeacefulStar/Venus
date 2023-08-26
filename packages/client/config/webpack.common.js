@@ -1,11 +1,11 @@
 'use strict';
 
 const webpack = require('webpack'),
-    path = require('path'),
-    // glob = require('glob'),
-    ESLintPlugin = require('eslint-webpack-plugin'),
-    MiniCssExtractPlugin = require('mini-css-extract-plugin'),
-    HtmlWebpackPlugin = require('html-webpack-plugin');
+  path = require('path'),
+  // glob = require('glob'),
+  ESLintPlugin = require('eslint-webpack-plugin'),
+  MiniCssExtractPlugin = require('mini-css-extract-plugin'),
+  HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const source = path.join(__dirname, '../source');
 

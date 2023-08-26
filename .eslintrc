@@ -15,7 +15,9 @@
       "jsx": true
     },
     "babelOptions": {
-      "presets": ["@babel/preset-react"]
+      "presets": [
+        "@babel/preset-react"
+      ]
     }
   },
   "plugins": [
@@ -30,10 +32,13 @@
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
     "prettier"
-//    "@react-native-community"
+    //    "@react-native-community"
   ],
   "rules": {
-    "quotes": ["error", "single"],
+    "quotes": [
+      "error",
+      "single"
+    ],
     "react/jsx-indent": 0,
     "react/display-name": 0,
     "react-hooks/exhaustive-deps": 0,
@@ -43,19 +48,26 @@
   },
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx"],
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
       "parser": "@typescript-eslint/parser",
-      "plugins": ["@typescript-eslint"],
+      "plugins": [
+        "@typescript-eslint"
+      ],
       "parserOptions": {
-        "ecmaFeatures": { "jsx": true },
+        "ecmaFeatures": {
+          "jsx": true
+        },
         "ecmaVersion": 10,
-        "project": "./tsconfig.json",
+        //        "project": "./tsconfig.json",
         "sourceType": "module"
       },
       "extends": [
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/eslint-recommended"
-//        "prettier/@typescript-eslint"
+        //        "prettier/@typescript-eslint"
       ],
       "rules": {
         "prefer-const": "off",
@@ -67,7 +79,13 @@
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-use-before-define": "off",
         "@typescript-eslint/no-parameter-properties": "off",
-        "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+        "@typescript-eslint/no-unused-vars": [
+          "warn",
+          {
+            "argsIgnorePattern": "^_",
+            "varsIgnorePattern": "^_"
+          }
+        ],
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/no-inferrable-types": "warn",
         "@typescript-eslint/no-empty-function": "off",
