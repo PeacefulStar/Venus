@@ -8,10 +8,35 @@ export const GET_USER = gql`
   }
 `;
 
-export const GET_Registration = gql`
-  query GetRegistration($mail: String!) {
-    getRegistration(input: { mail: $mail }) {
-      id
+export const GENERATE_REGISTRATION = gql`
+  query GenerateRegistration {
+    generateRegistration {
+      options {
+        challenge
+        rp {
+          id
+          name
+        }
+        user {
+          id
+          name
+          displayName
+        }
+        pubKeyCredParams {
+          alg
+          type
+        }
+        timeout
+        attestation
+        authenticatorSelection {
+          residentKey
+          requireResidentKey
+        }
+        extensions {
+          credProps
+        }
+      }
+      url
     }
   }
 `;

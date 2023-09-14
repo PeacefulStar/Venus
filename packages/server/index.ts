@@ -21,8 +21,7 @@ import dotenv from 'dotenv';
 import config from '../client/config/webpack.dev';
 import typeDefs from './graphql/schema';
 import resolvers from './graphql/resolvers';
-// import ask from './routes/ask';
-// import well from './routes/well-known';
+import well from './routes/well-known';
 
 dotenv.config({ path: '../../.env' });
 
@@ -46,8 +45,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors(corsOptions), bodyParser.json());
-// app.use('/ask/', ask);
-// app.use('/.well-known/acme-challenge/', well);
+app.use('/.well-known/acme-challenge/', well);
 app.use(
   webpackDevMiddleware(compiler, {
     publicPath: config.output.publicPath,
@@ -116,7 +114,9 @@ app.use(
   );
 
   app.get('*', (req, res) => {
-    console.log(req.protocol, 119);
+    console.log(req.protocol, 117);
+    console.log(req.hostname, 118);
+    console.log(req.get('host'), 119);
     console.log(req.headers, 120);
     const filename = path.join(compiler.outputPath, 'index.html');
     compiler.outputFileSystem.readFile(filename, (err, result) => {
@@ -127,8 +127,8 @@ app.use(
   });
 
   if (NODE_ENV === 'production') {
-    // await new Promise<void>((resolve) => httpServer.listen(80, resolve));
-    // console.log('HTTP Server running on port 80');
+    new Promise<void>((resolve) => httpServer.listen(80, resolve));
+    console.log('HTTP Server running on port 80');
 
     const credentials = {
       key: fs.readFileSync(

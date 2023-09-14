@@ -1,9 +1,9 @@
-import {Schema, model} from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 interface IUser {
   name: string;
   email: string;
-  password: string;
+  // password: string;
 }
 
 const userSchema = new Schema<IUser>(
@@ -22,15 +22,15 @@ const userSchema = new Schema<IUser>(
       unique: true,
       required: true,
     },
-    password: {
-      type: String,
-      min: 6,
-      max: 1024,
-      unique: false,
-      required: true,
-    },
+    // password: {
+    //   type: String,
+    //   min: 6,
+    //   max: 1024,
+    //   unique: false,
+    //   required: true,
+    // },
   },
-  {timestamps: true}
+  { timestamps: true },
 );
 
 const User = model<IUser>('user', userSchema);

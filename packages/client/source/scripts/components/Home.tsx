@@ -4,9 +4,7 @@ import React from 'react';
 import style from '../../styles/scss/main.module.scss';
 
 const Home = () => {
-    return (
-        <div className={style.full_image} />
-        );
+  return <div className={style.full_image} />;
 };
 
 export default Home;

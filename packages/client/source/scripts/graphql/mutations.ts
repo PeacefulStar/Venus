@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_USER = gql`
-  mutation CreateUser($name: String!, $email: String!, $password: String!) {
-    createUser(input: { name: $name, email: $email, password: $password }) {
+  mutation CreateUser($name: String!, $email: String!) {
+    createUser(input: { name: $name, email: $email }) {
       token
     }
   }
@@ -20,6 +20,30 @@ export const SIGN_OUT_USER = gql`
   mutation SignOutUser {
     signOutUser {
       status
+    }
+  }
+`;
+
+export const VERIFY_REGISTRATION = gql`
+  mutation VerifyRegistration($options: Credential) {
+    verifyRegistration(input: { options: $options }) {
+      options {
+        verified
+        registrationInfo {
+          fmt
+          counter
+          aaguid
+          credentialID
+          credentialPublicKey
+          attestationObject
+          credentialType
+          userVerified
+          credentialDeviceType
+          credentialBackedUp
+          origin
+          rpID
+        }
+      }
     }
   }
 `;

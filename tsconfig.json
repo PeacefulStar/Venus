@@ -23,7 +23,7 @@
     "noImplicitReturns": true,
     "strictNullChecks": true,
     "jsx": "react",
-    "rootDir": "."
+//    "rootDir": "."
     //    "checkJs": true,
     //    "noUnusedLocals": true
   },

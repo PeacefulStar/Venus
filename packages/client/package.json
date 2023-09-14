@@ -23,7 +23,7 @@
         "react-router": "^6.0.1",
         "react-router-dom": "^6.0.1",
         "styled-components": "^6.0.7",
-        "three": "^0.155.0"
+        "three": "^0.156.0"
     },
     "devDependencies": {
         "@pmmmwh/react-refresh-webpack-plugin": "^0.5.1",
@@ -33,7 +33,7 @@
         "@types/react-router": "^5.1.13",
         "@types/react-router-dom": "^5.1.7",
         "@types/regenerator-runtime": "^0.13.1",
-        "@types/three": "^0.155.0",
+        "@types/three": "^0.156.0",
         "@types/webpack": "^5.28.0",
         "babel-loader": "^9.0.0",
         "clean-webpack-plugin": "^4.0.0-alpha.0",
