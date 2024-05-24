@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation } from '@apollo/client';
-// import {styled} from 'styled-components';
 import { GET_USER } from '../graphql/queries';
 import { CREATE_USER } from '../graphql/mutations';
 import style from '../../styles/scss/main.module.scss';
 
-// const Contents = styled.div`
-//
-// `;
-
 const SignUp = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  // const [password, setPassword] = useState('');
   const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
   const [confirm, setConfirm] = useState(false);
@@ -23,7 +18,7 @@ const SignUp = () => {
       setLoading(false);
       const registered = res.getUser;
       if (registered) {
-        // onToggleView('createAccount', email);
+        console.log(registered);
       } else {
         setConfirm(true);
       }
@@ -43,7 +38,7 @@ const SignUp = () => {
         setLoading(false);
         setConfirm(false);
         setCompleted(true);
-        // window.location.href = '/';
+        window.location.href = '/authentication';
       }
     },
     onError: (err): void => {
@@ -65,12 +60,16 @@ const SignUp = () => {
   const handleRegister = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    await createUser({ variables: { name, email, password } });
+    await createUser({ variables: { name, email } });
   };
 
   useEffect(() => {
     console.log(error);
   }, [error]);
+
+  useEffect(() => {
+    console.log(window.PublicKeyCredential);
+  }, []);
 
   return (
     <section className={style.centering}>
@@ -85,7 +84,7 @@ const SignUp = () => {
               <ul>
                 <li>Name : {name}</li>
                 <li>Mail Address : {email}</li>
-                <li>Password : {password}</li>
+                {/*<li>Password : {password}</li>*/}
               </ul>
             </div>
             <div className={style.button} onClick={handleRegister}>
@@ -108,12 +107,12 @@ const SignUp = () => {
               value={email}
               onChange={handleChange(setEmail)}
             />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={handleChange(setPassword)}
-            />
+            {/*<input*/}
+            {/*  type="password"*/}
+            {/*  placeholder="Password"*/}
+            {/*  value={password}*/}
+            {/*  onChange={handleChange(setPassword)}*/}
+            {/*/>*/}
             {/*<span>{error || ''}</span>*/}
             <button type="submit">{loading ? 'Sending...' : 'Continue'}</button>
           </form>

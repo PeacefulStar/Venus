@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 // import history from 'history/browser';
 
 import Home from './Home';
+import Authentication from './Authentication';
 import Reality from './Reality';
 import Ocean from './Ocean';
 import AI from './AI';
@@ -34,6 +35,7 @@ const App: React.FunctionComponent = () => {
         <GlobalProvider>
           <Routes>
             <Route path={'/'} element={<Home />} />
+            <Route path={'/authentication'} element={<Authentication />} />
             <Route path={'/reality'} element={<Reality />} />
             <Route path={'/ocean'} element={<Ocean />} />
             <Route path={'/ai'} element={<AI />} />
