@@ -10,10 +10,12 @@ import * as serviceWorker from './serviceWorker';
 
 const root = createRoot(document.getElementById('root') as Element);
 
+console.log(process.env.NODE_ENV)
+
 const generateUri = () => {
   return process.env.NODE_ENV === 'production'
     ? 'https://peacefulstar.art/graphql'
-    : 'http://localhost:3010/graphql';
+    : 'http://localhost:3000/graphql';
 };
 
 const client = new ApolloClient({

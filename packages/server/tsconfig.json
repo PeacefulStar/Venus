@@ -1,5 +1,23 @@
 {
   "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": [
+      "ESNext"
+    ],
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "sourceMap": false,
+    "baseUrl": "./",
+    "types": [
+      "node"
+    ]
+  },
+  "ts-node": {
+    "esm": true,
+    "require": ["tsconfig-paths/register"]
+  },
   "exclude": [
     "node_modules/**/*",
     "../client"

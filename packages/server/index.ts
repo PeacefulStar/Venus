@@ -73,7 +73,7 @@ app.use(
   await mongoose
     .connect(url)
     .then(() => console.log('mongoose connection successful'))
-    .catch((err) => console.error('mongoose', err));
+    .catch((err: object) => console.error('mongoose', err));
 
   app.use(
     session({
@@ -118,8 +118,9 @@ app.use(
     console.log(req.hostname, 118);
     console.log(req.get('host'), 119);
     console.log(req.headers, 120);
+    console.log(compiler, 121)
     const filename = path.join(compiler.outputPath, 'index.html');
-    compiler.outputFileSystem.readFile(filename, (err, result) => {
+    compiler.outputFileSystem?.readFile(filename, (err, result) => {
       res.set('content-type', 'text/html');
       res.send(result);
       res.end();

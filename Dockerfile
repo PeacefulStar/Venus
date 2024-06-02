@@ -13,8 +13,8 @@ RUN dnf -y update \
     && echo $user:$pass | chpasswd \
     && echo "$user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-EXPOSE 53/UDP
-EXPOSE 53/TCP
+#EXPOSE 53/UDP
+#EXPOSE 53/TCP
 EXPOSE 8008
 
 CMD ["/usr/sbin/init"]

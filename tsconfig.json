@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "commonjs",
-    "lib": [
-      "ESNext",
-      "DOM"
-    ],
+    //    "target": "ESNext",
+    //    "module": "CommonJS",
+    //    "lib": [
+    //      "ESNext",
+    //      "DOM"
+    //    ],
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "moduleResolution": "node",
+//    "sourceMap": true,
+    //    "moduleResolution": "node",
     "esModuleInterop": true,
     //    "pretty": true,
     "strict": true,
@@ -21,9 +21,10 @@
     "noImplicitAny": true,
     "noImplicitThis": true,
     "noImplicitReturns": true,
+    "noEmit": true,
     "strictNullChecks": true,
-    "jsx": "react",
-//    "rootDir": "."
+    "jsx": "react"
+    //    "rootDir": "."
     //    "checkJs": true,
     //    "noUnusedLocals": true
   },
