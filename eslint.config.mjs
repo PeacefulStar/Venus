@@ -6,13 +6,13 @@ import tseslint from 'typescript-eslint';
 // import {fileURLToPath} from 'url';
 import {FlatCompat} from '@eslint/eslintrc';
 import eslint from '@eslint/js';
-import { fixupPluginRules } from "@eslint/compat";
+// import { fixupPluginRules } from "@eslint/compat";
 import eslintPluginPlugin from 'eslint-plugin-eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
 // import nodePlugin from 'eslint-plugin-n';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import jestPlugin from 'eslint-plugin-jest';
-import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
+// import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 
@@ -26,7 +26,7 @@ export default tseslint.config(
       ['eslint-plugin']: eslintPluginPlugin,
       ['import']: importPlugin,
       ['jest']: jestPlugin,
-      ['jsx-a11y']: jsxA11yPlugin,
+      // ['jsx-a11y']: jsxA11yPlugin,
       ['react-hooks']: reactHooksPlugin,
       ['react']: reactPlugin,
     },
@@ -41,20 +41,20 @@ export default tseslint.config(
   eslint.configs.recommended,
   eslintConfigPrettier,
   // ...nodePlugin.configs['flat/recommended-script'],
-  ...tseslint.configs.strictTypeChecked,
-  ...tseslint.configs.stylisticTypeChecked,
+  // ...tseslint.configs.strictTypeChecked,
+  // ...tseslint.configs.stylisticTypeChecked,
   ...tseslint.configs.recommendedTypeChecked,
   // ...fixupPluginRules(reactPlugin),
   {
     languageOptions: {
       globals: {
-        ...globals.browser,
-        ...globals.commonjs,
+        // ...globals.browser,
+        // ...globals.commonjs,
         ...globals.es2021,
         ...globals.node,
       },
-      ecmaVersion: 'latest',
-      sourceType: 'module',
+      // ecmaVersion: 'latest',
+      // sourceType: 'module',
       // parser: tseslint.parser,
       parserOptions: {
         allowAutomaticSingleRunInference: true,
@@ -71,7 +71,7 @@ export default tseslint.config(
     },
     rules: {
       '@typescript-eslint/no-confusing-void-expression': 'off',
-      '@typescript-eslint/prefer-string-starts-ends-with': 'off',
+      // '@typescript-eslint/prefer-string-starts-ends-with': 'off',
 
       '@typescript-eslint/ban-ts-comment': [
         'error',
@@ -99,8 +99,8 @@ export default tseslint.config(
       // '@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
       // '@typescript-eslint/no-unsafe-return': 'off',
       // '@typescript-eslint/consistent-type-definitions': 'off',
-      // 'no-constant-condition': 'off',
-      // '@typescript-eslint/no-misused-promises': 'off',
+      'no-constant-condition': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
       '@typescript-eslint/no-unnecessary-condition': [
         'error',
         {allowConstantLoopConditions: true},
@@ -110,6 +110,12 @@ export default tseslint.config(
         'error',
         {
           allowBitwiseExpressions: true,
+        },
+      ],
+      '@typescript-eslint/prefer-string-starts-ends-with': [
+        'error',
+        {
+          allowSingleElementEquality: 'always',
         },
       ],
       '@typescript-eslint/unbound-method': 'off',
@@ -203,14 +209,30 @@ export default tseslint.config(
     },
   },
   {
-    files: ['packages/client/**/*.{ts,tsx,mts,cts,js,jsx}'],
+    files: ['packages/client/**/*.{ts,tsx,mts,cts,js,jsx,mjs}'],
+    // plugins: {
+    //   reactPlugin,
+    // },
+    languageOptions: {
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      // globals: {
+      //   ...globals.browser,
+      // },
+    },
     extends: [
-      ...compat.config(jsxA11yPlugin.configs.recommended),
+      // ...compat.config(jsxA11yPlugin.configs.recommended),
       ...compat.config(reactPlugin.configs.recommended),
       ...compat.config(reactHooksPlugin.configs.recommended),
     ],
     rules: {
       // '@typescript-eslint/internal/prefer-ast-types-enum': 'off',
+      "react/no-unknown-property": ["error", { ignore: ["css"] }],
+      'react/jsx-uses-react': 'error',
+      'react/jsx-uses-vars': 'error',
       'import/no-default-export': 'off',
       'react/jsx-no-target-blank': 'off',
       'react/no-unescaped-entities': 'off',

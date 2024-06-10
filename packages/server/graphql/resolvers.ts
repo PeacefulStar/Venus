@@ -1,16 +1,17 @@
-import jwt, { Algorithm } from 'jsonwebtoken';
+import type { Algorithm } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
 import {
   generateRegistrationOptions,
   verifyRegistrationResponse,
-  generateAuthenticationOptions,
-  verifyAuthenticationResponse,
+  // generateAuthenticationOptions,
+  // verifyAuthenticationResponse,
 } from '@simplewebauthn/server';
 // import { Fido2Lib } from 'fido2-lib';
 // import { coerceToArrayBuffer, coerceToBase64Url } from 'fido2-lib/lib/utils';
-import User from '..//models/user';
+import User from '../models/user';
 import Token from '../models/token';
 import Chat from '../models/chat';
 
@@ -46,10 +47,11 @@ const isValidToken = (str: string): boolean => {
   console.log(str, 62);
   if (str) {
     try {
-      const token: any = JSON.parse(str);
+      const token = JSON.parse(str) as string;
       console.log(jwt.verify(token, JWT_SECRET as Algorithm), 66);
       return !!jwt.verify(token, JWT_SECRET as Algorithm);
     } catch (err) {
+      console.log(err)
       return false;
     }
   }
@@ -62,14 +64,15 @@ const getStatus = (token: string, tokens: string[]): number => {
 
 const resolvers = {
   Query: {
-    async getUser(_: any, args: any): Promise<object> {
+    getUser(_: unknown, args: { input: { email: string } }): object {
+      console.log(args)
       const {
         input: { email },
       } = args;
-      return User.findOne({ email }) as any;
+      return User.findOne({ email });
     },
-    async generateRegistration(_: any, _args: any, ctx: any): Promise<object> {
-      const token = ctx.req.cookies['x-access-token'];
+    async generateRegistration(_: never, _args: never, ctx: any): Promise<object> {
+      const token = ctx.req.cookies['x-access-token'] as string;
       const result: any = jwt.verify(
         JSON.parse(token),
         JWT_SECRET as Algorithm,
@@ -114,9 +117,9 @@ const resolvers = {
 
       return { options: obj, url: url };
     },
-    async isAuthenticated(_: any, _args: any, ctx: any): Promise<object> {
+    async isAuthenticated(_: never, _args: never, ctx: any): Promise<object> {
       // console.log(ctx.req, 94);
-      const token: string = ctx.req.cookies['x-access-token'];
+      const token = ctx.req.cookies['x-access-token'] as string;
       const tokens: string[] = await Token.find({ tags: token });
       const status: number = getStatus(
         ctx.req.cookies['x-access-token'],
@@ -135,7 +138,7 @@ const resolvers = {
     },
   },
   Mutation: {
-    createUser: async (_: any, args: any, ctx: any): Promise<object> => {
+    createUser: async (_: never, args: { input: { email: string, name: string } }, ctx: any): Promise<object> => {
       const {
         input: { name, email },
       } = args;
@@ -160,7 +163,7 @@ const resolvers = {
         throw new Error(error.message);
       }
     },
-    signInUser: async (_: any, args: any, ctx: any): Promise<object> => {
+    signInUser: async (_: never, args: { input: { email: string, password: string } }, ctx: any): Promise<object> => {
       const {
         input: { email, password },
       } = args;
@@ -187,8 +190,8 @@ const resolvers = {
         throw new Error(error.message);
       }
     },
-    signOutUser: async (_: any, _args: any, ctx: any): Promise<object> => {
-      const token: string = ctx.req.cookies['x-access-token'];
+    signOutUser: async (_: never, _args: never, ctx: any): Promise<object> => {
+      const token = ctx.req.cookies['x-access-token'] as string;
       if (token) {
         const newToken = new Token();
         newToken.tags.push(token);
@@ -200,7 +203,7 @@ const resolvers = {
       };
     },
     verifyRegistration: async (
-      _: any,
+      _: never,
       args: any,
       ctx: any,
     ): Promise<object> => {
@@ -209,15 +212,16 @@ const resolvers = {
       } = args;
       console.log(args, 210);
       console.log(options, 211);
+      console.log(ctx)
 
       const verification = await verifyRegistrationResponse(options);
       console.log(verification, 214);
 
       return { options: verification };
     },
-    chat: async (_: any, args: any): Promise<any> => {
+    chat: async (_: never, args: {input: { question: string }}): Promise<any> => {
       const {
-        input: { question },
+        input: { question }
       } = args;
 
       if (question) {

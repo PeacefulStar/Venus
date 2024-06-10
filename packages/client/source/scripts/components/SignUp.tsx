@@ -1,10 +1,10 @@
+import type { FC, SyntheticEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { GET_USER } from '../graphql/queries';
 import { CREATE_USER } from '../graphql/mutations';
-import style from '../../styles/scss/main.module.scss';
 
-const SignUp = () => {
+const SignUp: FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   // const [password, setPassword] = useState('');
@@ -15,6 +15,7 @@ const SignUp = () => {
 
   const [getUser] = useLazyQuery(GET_USER, {
     onCompleted: (res) => {
+      console.log(res)
       setLoading(false);
       const registered = res.getUser;
       if (registered) {
@@ -47,17 +48,18 @@ const SignUp = () => {
     },
   });
 
-  const handleChange = (setter: any) => (e: any) => {
+  const handleChange = (setter: any) => (e: {target: {value: string}}) => {
+    console.log(setter)
     setter(e.target.value);
   };
 
-  const handleContinue = async (e: any) => {
+  const handleContinue = async (e: SyntheticEvent) => {
     e.preventDefault();
     setLoading(true);
     await getUser({ variables: { email } });
   };
 
-  const handleRegister = async (e: any) => {
+  const handleRegister = async (e: SyntheticEvent) => {
     e.preventDefault();
     setLoading(true);
     await createUser({ variables: { name, email } });
@@ -72,11 +74,11 @@ const SignUp = () => {
   }, []);
 
   return (
-    <section className={style.centering}>
+    <section className={'centering'}>
       <div>
         <h1>Sign up</h1>
       </div>
-      <div className={style.frame}>
+      <div className={'frame'}>
         {confirm ? (
           <>
             <div>Would you like to register?</div>
@@ -87,7 +89,7 @@ const SignUp = () => {
                 {/*<li>Password : {password}</li>*/}
               </ul>
             </div>
-            <div className={style.button} onClick={handleRegister}>
+            <div className={'button'} onClick={handleRegister}>
               {loading ? 'Sending...' : 'Register'}
             </div>
           </>
