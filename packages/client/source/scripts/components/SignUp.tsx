@@ -1,4 +1,4 @@
-import type { FC, SyntheticEvent } from 'react';
+import type { Dispatch, FC, SetStateAction, SyntheticEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { GET_USER } from '../graphql/queries';
@@ -17,7 +17,7 @@ const SignUp: FC = () => {
     onCompleted: (res) => {
       console.log(res)
       setLoading(false);
-      const registered = res.getUser;
+      const registered = res.getUser as object;
       if (registered) {
         console.log(registered);
       } else {
@@ -31,10 +31,12 @@ const SignUp: FC = () => {
   });
 
   const [createUser] = useMutation(CREATE_USER, {
-    onCompleted: (res): void => {
+    onCompleted: (res: {createUser: {token: string}}): void => {
+      console.log(res)
       const {
         createUser: { token },
       } = res;
+
       if (token) {
         setLoading(false);
         setConfirm(false);
@@ -48,12 +50,17 @@ const SignUp: FC = () => {
     },
   });
 
-  const handleChange = (setter: any) => (e: {target: {value: string}}) => {
-    console.log(setter)
+  const handleChange: (setter: Dispatch<SetStateAction<string>>) => (
+    e: { target: { value: string } }
+  ) => void = (setter: Dispatch<SetStateAction<string>>) => (
+    e: {target: {value: string}}
+  ) => {
     setter(e.target.value);
   };
 
   const handleContinue = async (e: SyntheticEvent) => {
+    console.log(e)
+    console.log(email)
     e.preventDefault();
     setLoading(true);
     await getUser({ variables: { email } });

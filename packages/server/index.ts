@@ -15,8 +15,8 @@ import fs from 'fs';
 import logger from 'morgan';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
-// import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import { buildSubgraphSchema } from "@apollo/subgraph";
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+
 import dotenv from 'dotenv';
 
 import {devConfig} from 'client/config/webpack.dev';
@@ -27,10 +27,6 @@ import well from './routes/well-known';
 
 // interface context {
 //   getUser: {input: { email: string}}
-// }
-
-// interface MyContext {
-//   token?: string;
 // }
 
 dotenv.config({ path: '../../.env' });
@@ -64,6 +60,7 @@ if (TYPE === 'virtual') {
 }
 
 const url = `mongodb://${USER}:${PASS}@${ip}:${DB_PORT}/${USER}`;
+console.log(url)
 
 await mongoose
   .connect(url)
@@ -111,30 +108,20 @@ app.use(
 
 const httpServer = http.createServer(app);
 
-const schema = buildSubgraphSchema({ typeDefs, resolvers });
-const apolloServer = new ApolloServer({schema});
+const apolloServer = new ApolloServer({
+  typeDefs,
+  resolvers,
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+});
 
 await apolloServer.start();
 
 app.use(
   '/graphql',
-  expressMiddleware(apolloServer),
+  expressMiddleware(apolloServer, {
+    context: async ({ req, res }) => ({req, res}),
+  }),
 );
-
-// const apolloServer = new ApolloServer<MyContext>({
-//   typeDefs,
-//   resolvers,
-//   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-// });
-//
-// await apolloServer.start();
-//
-// app.use(
-//   '/graphql',
-//   expressMiddleware(apolloServer, {
-//     context: async ({ req }) => ({ token: req.headers.token }),
-//   }),
-// );
 
 
 app.get('*', (req, res) => {

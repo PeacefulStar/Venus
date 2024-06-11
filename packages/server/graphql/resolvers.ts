@@ -2,7 +2,8 @@ import type { Algorithm } from 'jsonwebtoken';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
-import OpenAI from 'openai';
+// import OpenAI from 'openai';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import {
   generateRegistrationOptions,
   verifyRegistrationResponse,
@@ -15,12 +16,21 @@ import User from '../models/user';
 import Token from '../models/token';
 import Chat from '../models/chat';
 
-dotenv.config({ path: '../../.env' });
-const { JWT_SECRET, NODE_ENV, OPENAI_API_KEY } = process.env;
+interface env {
+  JWT_SECRET: string;
+  NODE_ENV: string;
+  OPENAI_API_KEY: string;
+  GOOGLE_GEN_AI_KEY: string;
+}
 
-const openai = new OpenAI({
-  apiKey: OPENAI_API_KEY,
-});
+dotenv.config({ path: '../../.env' });
+const { JWT_SECRET, NODE_ENV, GOOGLE_GEN_AI_KEY } = process.env as unknown as env;;
+
+const genAI = new GoogleGenerativeAI(GOOGLE_GEN_AI_KEY);
+
+// const openai = new OpenAI({
+//   apiKey: OPENAI_API_KEY,
+// });
 console.log(NODE_ENV, 24);
 
 // const rp = NODE_ENV === 'production' ? 'https://peacefulstar.art' : 'localhost';
@@ -64,12 +74,14 @@ const getStatus = (token: string, tokens: string[]): number => {
 
 const resolvers = {
   Query: {
-    getUser(_: unknown, args: { input: { email: string } }): object {
-      console.log(args)
+    async getUser(_: unknown, args: { input: { email: string } }): Promise<object> {
+      console.log(args, 68)
       const {
         input: { email },
       } = args;
-      return User.findOne({ email });
+      console.log(email,72)
+
+      return await User.findOne({ email }) as object;
     },
     async generateRegistration(_: never, _args: never, ctx: any): Promise<object> {
       const token = ctx.req.cookies['x-access-token'] as string;
@@ -219,26 +231,25 @@ const resolvers = {
 
       return { options: verification };
     },
-    chat: async (_: never, args: {input: { question: string }}): Promise<any> => {
+    chat: async (_: unknown, args: { input: { question: string } }): Promise<any> => {
       const {
-        input: { question }
+        input: { question },
       } = args;
 
+      console.log(question, 210);
+
       if (question) {
-        const answer = await openai.chat.completions
-          .create({
-            model: 'gpt-3.5-turbo',
-            messages: [{ role: 'user', content: question }],
-            // temperature: 0,
-            // max_tokens: 1000,
-          })
+        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        const answer = await model
+          .generateContent(question)
           .then((res) => {
-            return res.choices[0].message.content;
+            return res.response.text();
           })
-          .catch((err) => {
+          .catch((err: string) => {
+            console.error(err);
             throw new Error(err);
           });
-        console.log(answer, 160);
+
         await Chat.create({
           question,
           answer,

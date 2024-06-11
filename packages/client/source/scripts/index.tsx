@@ -1,21 +1,20 @@
-// import 'core-js/stable';
-// import 'regenerator-runtime/runtime';
 import React from 'react';
 import {createRoot} from 'react-dom/client';
 import {BrowserRouter} from 'react-router-dom';
 import {ApolloClient, ApolloProvider, InMemoryCache} from '@apollo/client';
 
 import App from './components/App';
-// import * as serviceWorker from './serviceWorker';
 
 const root = createRoot(document.getElementById('root') as Element);
-
-console.log(process.env.NODE_ENV)
+const { NODE_ENV, TYPE } = process.env;
+console.log(NODE_ENV)
 
 const generateUri = (): string => {
-  return process.env.NODE_ENV === 'production'
-    ? 'https://peacefulstar.art/graphql'
-    : 'http://localhost:3000/graphql';
+  return NODE_ENV === 'production'
+    ? 'https://peacefulstar.art/graphql' :
+    TYPE === 'virtual' ?
+      'http://localhost:3010/graphql':
+      'http://localhost:3000/graphql';
 };
 
 const client = new ApolloClient({
@@ -31,9 +30,3 @@ root.render(
     </BrowserRouter>
   </ApolloProvider>,
 );
-
-// if (module.hot) {
-//     module.hot.accept('./components/App', render);
-// }
-
-// serviceWorker.unregister();
