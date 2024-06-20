@@ -5,13 +5,12 @@
   "type": "module",
   "scripts": {
     "start": "node --loader ts-node/esm index.ts  --watch ../client/destination",
-    "dev": "node --loader ts-node/esm ./index.ts",
+    "dev": "nodemon --exec node --loader ts-node/esm ./index.ts",
     "mail": "node mail.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.8.1",
-    "@apollo/subgraph": "^2.8.0",
-    "@google/generative-ai": "^0.12.0",
+    "@google/generative-ai": "^0.13.0",
     "@simplewebauthn/server": "^10.0.0",
     "address": "^2.0.2",
     "bcryptjs": "^2.4.3",

@@ -53,9 +53,6 @@ export const common = {
       '.js',
       '.json',
       '.jsx',
-      '.scss',
-      '.css',
-      '.pcss',
       '.ts',
       '.tsx',
     ],
@@ -88,35 +85,6 @@ export const common = {
           }
         },
       },
-      // {
-      //   test: /\.s?p?css$/,
-      //   use: [
-      //     MiniCssExtractPlugin.loader,
-      //     {
-      //       loader: 'css-loader',
-      //       options: {
-      //         modules: {
-      //           mode: 'local',
-      //           localIdentName: '[local]--[hash:base64:5]',
-      //         },
-      //         sourceMap: true,
-      //         importLoaders: 2,
-      //       },
-      //     },
-      //     {
-      //       loader: 'postcss-loader',
-      //       options: {
-      //         sourceMap: true,
-      //       },
-      //     },
-      //     {
-      //       loader: 'sass-loader',
-      //       options: {
-      //         sourceMap: true,
-      //       },
-      //     },
-      //   ],
-      // },
       {
         test: /\.html$/,
         loader: 'html-loader',

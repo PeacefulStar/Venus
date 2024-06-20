@@ -1,4 +1,5 @@
 import express from 'express';
+import type {Request, Response} from "express";
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
@@ -22,7 +23,7 @@ import dotenv from 'dotenv';
 import {devConfig} from 'client/config/webpack.dev';
 import typeDefs from './graphql/schema';
 import resolvers from './graphql/resolvers';
-import well from './routes/well-known';
+import well from './routes/well-known.ts';
 // import {IUser} from "./models/user";
 
 // interface context {
@@ -124,7 +125,7 @@ app.use(
 );
 
 
-app.get('*', (req, res) => {
+app.get('*', (req: Request, res: Response) => {
   console.log(req.protocol, 117);
   console.log(req.hostname, 118);
   console.log(req.get('host'), 119);

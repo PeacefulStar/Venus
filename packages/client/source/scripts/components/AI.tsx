@@ -10,7 +10,6 @@ const AI: FC = () => {
 
   const [chat] = useMutation(CHAT, {
     onCompleted: (res: {chat: {answer: string}}) => {
-      console.log(res)
       if (res.chat.answer) {
         setLoading(false);
         setAnswer(res.chat.answer);

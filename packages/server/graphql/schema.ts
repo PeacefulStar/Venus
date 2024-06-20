@@ -39,7 +39,7 @@ const typeDefs = gql`
   type Extensions {
     credProps: Boolean
   }
-  type Registration {
+  type PublicKeyCredential {
     challenge: String
     rp: RP
     user: CredentialUser
@@ -50,7 +50,7 @@ const typeDefs = gql`
     extensions: Extensions
   }
   type RegistrationOptions {
-    options: Registration
+    options: PublicKeyCredential
     url: String
   }
   type RegistrationInfo {
@@ -73,6 +73,9 @@ const typeDefs = gql`
   }
   type RegistrationResponse {
     options: ResponseOpts
+  }
+  type VerifiedResponse {
+    verified: Boolean
   }
   type AuthenticationPayload {
     id: ID!
@@ -116,9 +119,6 @@ const typeDefs = gql`
     expectedRPID: String
     requireUserVerification: Boolean
   }
-  input ResponseObj {
-    options: Credential
-  }
   input Create {
     name: String!
     email: String!
@@ -128,23 +128,20 @@ const typeDefs = gql`
     email: String!
     password: String!
   }
-  input question {
-    question: String!
-  }
 
   type Query {
-    getUser(input: GetUser): User
-    generateRegistration: RegistrationOptions
+    getUser(email: String!): User
     isAuthenticated: IsAuthenticated
   }
   type Mutation {
-    createUser(input: Create): AuthenticationPayload!
-    signInUser(input: Sign): SignIn!
-    signOutUser: SignOut
+#    createUser(input: Create): AuthenticationPayload!
+    generateRegistration(name: String!, email: String!): RegistrationOptions!  
+#    signInUser(input: Sign): SignIn!
+#    signOutUser: SignOut
     #    updateUser(id: ID!, name: String, email: String, password: String): User
     #    deleteUser(id: ID!): User
-    verifyRegistration(input: ResponseObj): RegistrationResponse
-    chat(input: question): Chat!
+    verifyRegistration(options: Credential): VerifiedResponse!
+    chat(question: String!): Chat!
   }
 `;
 

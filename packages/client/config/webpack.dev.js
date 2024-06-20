@@ -1,5 +1,3 @@
-'use strict';
-
 import webpack from "webpack";
 import path from "node:path";
 import {merge} from "webpack-merge";
