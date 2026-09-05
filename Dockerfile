@@ -22,7 +22,7 @@ WORKDIR /home/ec2-user/venus
 COPY package.json .
 COPY ./packages/client/package.json packages/client/
 COPY ./packages/server/package.json packages/server/
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 COPY . .
 RUN ls -al
