@@ -19,6 +19,7 @@ FROM node AS web
 #    && brew install nvm node yarn pyenv certbot
 
 WORKDIR /home/ec2-user/venus
+RUN yarn -h
 COPY package.json .
 COPY ./packages/client/package.json packages/client/
 COPY ./packages/server/package.json packages/server/
