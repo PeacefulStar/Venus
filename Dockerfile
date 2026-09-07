@@ -19,16 +19,13 @@ FROM node AS web
 #    && brew install nvm node yarn pyenv certbot
 
 WORKDIR /home/ec2-user/venus
-COPY package.json .
-COPY ./packages/client/package.json packages/client/
-COPY ./packages/server/package.json packages/server/
-RUN npm ci --omit=dev
-
 COPY . .
+RUN yarn install
+
 RUN ls -al
 
 EXPOSE 80
 EXPOSE 443
 
-CMD ["npm", "run", "build"]
-CMD ["npm", "run", "server"]
+CMD ["yarn", "build"]
+CMD ["yarn", "server"]
