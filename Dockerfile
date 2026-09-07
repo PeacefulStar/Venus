@@ -1,4 +1,4 @@
-FROM node AS web
+FROM almalinux AS web
 
 RUN dnf -y update \
     && dnf install 'dnf-command(config-manager)' -y \
