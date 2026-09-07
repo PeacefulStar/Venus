@@ -68,6 +68,7 @@ jobs:
             cd ~/venus
             git pull origin main
             docker-compose down
+            docker-compose run -w /home/ec2-user/venus --rm node yarn install
             docker-compose up -d
             docker image prune -f
 
