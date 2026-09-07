@@ -20,6 +20,7 @@ FROM node AS web
 
 WORKDIR /home/ec2-user/venus
 COPY . .
+USER linuxbrew
 RUN yarn install
 
 RUN ls -al
