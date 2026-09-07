@@ -20,7 +20,7 @@ FROM node AS web
 
 WORKDIR /home/ec2-user/venus
 COPY . .
-RUN yarn install
+RUN npm install -g yarn && yarn install
 
 RUN ls -al
 
