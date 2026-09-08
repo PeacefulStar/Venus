@@ -17,8 +17,8 @@ services:
       - "443:443"
     volumes:
       - ./packages:/home/ec2-user/venus/packages
-      - certbot/www:/home/ec2-user/venus/packages/server/routes
-      - certbot/conf:/etc/letsencrypt
+      - certbot-www:/home/ec2-user/venus/packages/server/routes
+      - certbot-conf:/etc/letsencrypt
     depends_on:
       - db
       - certbot
@@ -30,8 +30,8 @@ services:
     image: certbot/certbot
     restart: unless-stopped
     volumes:
-      - certbot/www:/home/ec2-user/venus/packages/server/routes
-      - certbot/conf:/etc/letsencrypt
+      - certbot-www:/home/ec2-user/venus/packages/server/routes
+      - certbot-conf:/etc/letsencrypt
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
   db:
@@ -56,8 +56,8 @@ services:
 
 volumes:
   mongodb:
-  certbot/www:
-  certbot/conf:
+  certbot-www:
+  certbot-conf:
 
 networks:
   web-db:
