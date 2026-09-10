@@ -22,9 +22,7 @@ WORKDIR /home/ec2-user/venus
 COPY . .
 RUN npm install -g yarn && yarn install
 
-RUN ls -al
-
-EXPOSE 3000
+EXPOSE 80
 EXPOSE 443
 
 CMD ["yarn", "build"]
